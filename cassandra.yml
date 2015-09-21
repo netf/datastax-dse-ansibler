@@ -1,0 +1,6 @@
+---
+- hosts: cassandra
+  roles:
+    - java
+    - datastax_dse
+  sudo: true

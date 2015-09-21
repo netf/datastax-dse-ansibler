@@ -1,0 +1,4 @@
+---
+- name: Install Datastax Repository
+  copy: src=datastax.repo dest=/etc/yum.repos.d/datastax.repo mode=0644
+  when: ansible_os_family == 'RedHat'

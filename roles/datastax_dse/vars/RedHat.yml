@@ -1,0 +1,6 @@
+---
+dsc_packages:
+  - dsc22
+  - cassandra22
+  - cassandra22-tools
+  - opscenter

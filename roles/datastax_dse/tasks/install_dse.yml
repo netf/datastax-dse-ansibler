@@ -1,0 +1,9 @@
+---
+
+- name: Add the OS specific varibles
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install the DSC and required Packages for RedHat
+  yum: name={{ item }} state=installed
+  with_items: dsc_packages
+  when: ansible_os_family == 'RedHat'

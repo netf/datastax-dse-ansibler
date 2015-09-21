@@ -1,0 +1,16 @@
+[dc1-cassandra]
+#52.19.189.8
+#54.72.175.104
+#52.19.81.134
+#54.72.216.8
+54.76.84.196
+
+[dc1-openldap]
+54.76.84.196
+
+[cassandra:children]
+dc1-cassandra
+
+
+[openldap:children]
+dc1-openldap
