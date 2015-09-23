@@ -13,4 +13,7 @@ Vagrant.configure(2) do |config|
   config.vm.define "cassandra2" do |cassandra2|
     cassandra2.vm.box = "hansode/centos-6.7-x86_64"
   end
+  config.vm.define "cassandra3" do |cassandra3|
+    cassandra3.vm.box = "hansode/centos-6.7-x86_64"
+  end
 end
