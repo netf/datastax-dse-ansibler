@@ -1,2 +1,2 @@
-- include cassandra.yml
+- include playbook.yml
 - include openldap.yml
