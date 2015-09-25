@@ -1,10 +1,23 @@
+# OS specific variables
+- name: Add the OS specific varibles
+  include_vars: "{{ ansible_os_family }}.yml"
+
 # Configure firewall first
 - name: iptables | add Opscenter (8888) port
-  command: /sbin/iptables -I INPUT 1 -p tcp --dport 8888 -j ACCEPT -m comment --comment "Opscenter"
+  command: /sbin/iptables -I INPUT 1 -p tcp --dport 8888 -j ACCEPT -m comment --comment "Opscenter and datastax-agent"
 
 - name: iptables | add inter-node (7000, 7001, 7199) ports
   command: /sbin/iptables -I INPUT 2 -p tcp --match multiport --dports 7000,7001,7199 -j ACCEPT -m comment --comment "inter node communication"
 
 - name: iptables | add client (9042, 9160) ports
   command: /sbin/iptables -I INPUT 3 -p tcp --match multiport --dports 9042,9160 -j ACCEPT -m comment --comment "client ports"
+
+# Copy Cassandra configuration
+- name: dse | copy cassandra.yml conf file
+  template: src=cassandra.yaml.j2 dest=/etc/dse/cassandra/cassandra.yaml owner=cassandra
+  notify: restart dse
+
+# Start Cassandra service
+- name: dse | start service
+  service: name=dse state=started enabled=yes
 

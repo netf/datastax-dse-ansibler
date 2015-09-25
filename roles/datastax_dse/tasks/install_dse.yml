@@ -3,7 +3,17 @@
 - name: Add the OS specific varibles
   include_vars: "{{ ansible_os_family }}.yml"
 
-- name: Install the DSC and required Packages for RedHat
+- name: Install the DSE and required Packages for RedHat
   yum: name={{ item }} state=installed
-  with_items: dsc_packages
+  async: 3600
+  poll: 0
+  register: yum_dse_install
+  with_items: dse_packages
   when: ansible_os_family == 'RedHat'
+
+- name: Wait until DSE install completes
+  async_status: jid={{ yum_dse_install.ansible_job_id }}
+  register: job_result
+  until: job_result.finished
+  retries: 300
+

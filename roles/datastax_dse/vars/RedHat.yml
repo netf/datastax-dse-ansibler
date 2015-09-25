@@ -4,3 +4,7 @@ dsc_packages:
   - cassandra22
   - cassandra22-tools
   - opscenter
+  - datastax-agent
+
+dse_packages:
+  - dse-full

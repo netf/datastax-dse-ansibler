@@ -3,5 +3,3 @@
 # Cassandra cluster name
 cluster_name: "Test Cluster"
 
-seeds:
-

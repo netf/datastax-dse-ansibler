@@ -1,0 +1,13 @@
+---
+
+# Cassandra configuration
+cluster_name: "Netf Cluster"
+
+# OpenLDAP configuration
+openldap_server_domain_name: datastax.com
+openldap_server_rootpw: datastax
+openldap_server_enable_ssl: true
+openldap_server_country: US
+openldap_server_state: California
+openldap_server_location: SantaClara
+openldap_server_organization: IT

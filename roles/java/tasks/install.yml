@@ -5,6 +5,7 @@
 
 - file: path={{java_download_dir}} state=directory mode=0755
 
+# used command instead of get_url cos headers is not supported in ansible 1.9.3 (from version 2.0)
 - name: Download JAVA from Oracle
   command: >
     wget --no-cookies
@@ -29,6 +30,7 @@
 - name: Enabling latest JAVA
   command: "{{item}}"
   with_items:
-    - /usr/sbin/alternatives --install "/usr/bin/java" "java" "/usr/java/latest/bin/java" 2
-    - /usr/sbin/alternatives --install "/usr/bin/javac" "javac" "/usr/java/latest/bin/javac" 2
+    - /usr/sbin/alternatives --install "/usr/bin/java" "java" "/usr/java/latest/bin/java" 2000
+    - /usr/sbin/alternatives --install "/usr/bin/javac" "javac" "/usr/java/latest/bin/javac" 2000
+    - /usr/sbin/alternatives --auto java
   when: ansible_os_family == 'RedHat'

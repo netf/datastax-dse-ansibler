@@ -1,6 +1,11 @@
 ---
-- hosts: all
+- hosts: cassandra*
   roles:
     - java
     - datastax_dse
+  sudo: true
+
+- hosts: openldap
+  roles:
+    - openldap_server
   sudo: true
