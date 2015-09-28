@@ -7,4 +7,16 @@ dsc_packages:
   - datastax-agent
 
 dse_packages:
+  - dse-libhive
+  - dse-libcassandra
+  - dse-demos
+  - dse-libspark
+  - dse-libtomcat
+  - dse-libpig
+  - dse-liblog4j
+  - dse-libhadoop
+  - dse-libsqoop
+  - dse-libsolr
+  - dse-libmahout
+  - dse-libhadoop-native
   - dse-full

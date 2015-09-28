@@ -1,0 +1,5 @@
+dse_packages:
+  - dse-full
+
+other_packages:
+  - sysstat

@@ -3,9 +3,25 @@
 - name: Add the OS specific varibles
   include_vars: "{{ ansible_os_family }}.yml"
 
-- file: path={{java_download_dir}} state=directory mode=0755
+# Debian
+- name: Install JAVA repo
+  apt_repository: repo='ppa:webupd8team/java'
 
-# used command instead of get_url cos headers is not supported in ansible 1.9.3 (from version 2.0)
+- name: Accept Oracle JAVA license
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+  when: ansible_os_family == 'Debian'
+
+- name: Install Oracle JAVA
+  apt: name={{item}} update_cache=yes
+  with_items:
+    - oracle-java8-installer
+    - oracle-java8-set-default
+  when: ansible_os_family == 'Debian'
+
+# RedHat
+- file: path={{java_download_dir}} state=directory mode=0755
+  when: ansible_os_family == 'RedHat'
+
 - name: Download JAVA from Oracle
   command: >
     wget --no-cookies
@@ -15,17 +31,20 @@
   args:
     chdir: "{{java_download_dir}}"
     creates: "{{java_download_dir}}/{{java_download_url.split('/')[-1]}}"
+  when: ansible_os_family == 'RedHat'
 
 - name: Unpack JAVA archive
   command: tar xfz {{java_download_url.split('/')[-1]}}
   args:
     chdir: "{{java_download_dir}}"
+  when: ansible_os_family == 'RedHat'
 
 - file: >
     src="{{java_download_dir}}/jdk1.{{java_download_url.split('/')[-1].split('-')[1].replace('u','.0_')}}"
     dest="{{java_download_dir}}/latest"
     force=yes
     state=link
+  when: ansible_os_family == 'RedHat'
 
 - name: Enabling latest JAVA
   command: "{{item}}"
