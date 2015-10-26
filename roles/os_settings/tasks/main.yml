@@ -1,4 +1,25 @@
 ---
 # tasks file for os_settings
 
- - name
+- name: apply SSD-specific optimisations if using SSD
+  shell: "{{item}}"
+  with_items:
+    - echo "0" > /sys/block/sda/queue/rotational
+    - echo deadline > /sys/block/sda/queue/scheduler
+    - echo 8 > /sys/class/block/sda/queue/read_ahead_kb
+  when: use_ssd == "true"
+
+- name: disable zone reclaim mode
+  shell: echo 0 > /proc/sys/vm/zone_reclaim_mode
+   
+- name: set user resource limits
+  copy: src=../files/resource_limits.conf dest=/etc/security/limits.d/cassandra.conf
+   
+- name: limit the number of discrete memory map areas a process can have
+  sysctl: name=vm.max_map_count value=131072 state=present reload=yes
+   
+- name: disable swap
+  shell: swapoff --all
+   
+- name: set readahead to 128
+  shell: blockdev --setra 128 /dev/sda

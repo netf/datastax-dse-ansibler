@@ -2,6 +2,8 @@
 - hosts: cassandra*
   roles:
     - java
+    - os_settings
+    - ntp
     - datastax_dse
   sudo: true
 
