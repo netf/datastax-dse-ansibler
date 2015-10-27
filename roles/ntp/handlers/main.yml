@@ -2,4 +2,4 @@
 # handlers file for ntp
 
 - name: restart ntpd
-  service: name=ntp state=restarted
+  service: name=ntpd state=restarted
