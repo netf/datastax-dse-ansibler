@@ -9,7 +9,7 @@
 - name: configure ntp (Debian)
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
   notify:
-    - restart ntpd
+    - restart ntp (Debian)
   when: ansible_os_family == 'Debian'
 
 - name: make sure that ntp is running and enabled (Debian)
@@ -24,7 +24,7 @@
 - name: configure ntp (RedHat)
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
   notify:
-    - restart ntpd
+    - restart ntp (RedHat)
   when: ansible_os_family == 'RedHat'
 
 - name: make sure that ntp is running and enabled (RedHat)
