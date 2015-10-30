@@ -6,6 +6,24 @@ Vagrant.configure(2) do |config|
   # number of cassandra nodes in a cluster. 3 to 5 is reasonable for learning.
   CLUSTER_SIZE = 3
   VAGRANT_IMAGE = "ubuntu/trusty64"
+  
+  if Vagrant.has_plugin?("vagrant-cachier")
+    # Configure cached packages to be shared between instances of the same base box.
+    # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
+    config.cache.scope = :machine
+
+    # OPTIONAL: If you are using VirtualBox, you might want to use that to enable
+    # NFS for shared folders. This is also very useful for vagrant-libvirt if you
+    # want bi-directional sync
+    config.cache.synced_folder_opts = {
+      type: :nfs,
+      # The nolock option can be useful for an NFSv3 client that wants to avoid the
+      # NLM sideband protocol. Without this option, apt-get might hang if it tries
+      # to lock files needed for /var/cache/* operations. All of this can be avoided
+      # by using NFSv4 everywhere. Please note that the tcp option is not the default.
+      mount_options: ['rw', 'vers=3', 'tcp', 'nolock']
+    }
+  end
 
   if Vagrant.has_plugin?("vagrant-cachier")
     # Configure cached packages to be shared between instances of the same base box.
@@ -57,6 +75,21 @@ Vagrant.configure(2) do |config|
         v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
         v.customize ["modifyvm", :id, "--ioapic", "on"]
       end
+
+	  # Fallback option: install java directly in the Vagrant VM rather than using the Ansible playbook
+	  # Commented out for now but it works
+	  # cassandra.vm.provision "shell", inline: <<-SHELL
+        # cd /opt
+        # wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.tar.gz"
+        # tar -xzf jdk-8u60-linux-x64.tar.gz
+    	# rm -rf jdk-8u60-linux-x64.tar.gz
+    	# update-alternatives --install "/usr/bin/java" "java" "/opt/jdk1.8.0_60/bin/java" 1
+    	# update-alternatives --set "java" "/opt/jdk1.8.0_60/bin/java"
+    	# update-alternatives --auto java
+    	# update-alternatives --install "/usr/bin/javac" "javac" "/opt/jdk1.8.0_60/bin/javac" 1
+    	# update-alternatives --set "javac" "/opt/jdk1.8.0_60/bin/javac"
+    	# update-alternatives --auto javac
+      # SHELL
 
       if cassandra_id == CLUSTER_SIZE
         seeds = seeds.join(",")

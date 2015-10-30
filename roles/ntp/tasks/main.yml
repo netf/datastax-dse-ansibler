@@ -1,0 +1,32 @@
+---
+# tasks file for ntp
+
+# Debian
+- name: install ntp (Debian)
+  apt: package=ntp state=present update_cache=yes
+  when: ansible_os_family == 'Debian' 
+
+- name: configure ntp (Debian)
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  notify:
+    - restart ntp (Debian)
+  when: ansible_os_family == 'Debian'
+
+- name: make sure that ntp is running and enabled (Debian)
+  service: name=ntp state=started enabled=yes
+  when: ansible_os_family == 'Debian'
+  
+# RedHat
+- name: install ntp (RedHat)
+  yum: name=ntp state=installed
+  when: ansible_os_family == 'RedHat'
+
+- name: configure ntp (RedHat)
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  notify:
+    - restart ntp (RedHat)
+  when: ansible_os_family == 'RedHat'
+
+- name: make sure that ntp is running and enabled (RedHat)
+  service: name=ntpd state=running enabled=yes
+  when: ansible_os_family == 'RedHat'

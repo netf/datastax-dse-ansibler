@@ -1,0 +1,8 @@
+---
+# handlers file for ntp
+
+- name: restart ntp (Debian)
+  service: name=ntp state=restarted
+
+- name: restart ntp (RedHat)
+  service: name=ntpd state=restarted
