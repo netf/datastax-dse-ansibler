@@ -4,7 +4,7 @@
 
 Vagrant.configure(2) do |config|
   # number of cassandra nodes in a cluster. 3 to 5 is reasonable for learning.
-  CLUSTER_SIZE = 1
+  CLUSTER_SIZE = 3
   VAGRANT_IMAGE = "ubuntu/trusty64"
 
   if Vagrant.has_plugin?("vagrant-cachier")
@@ -41,13 +41,13 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  seeds = []
+  group = []
   (1..CLUSTER_SIZE).each do |cassandra_id|
     config.vm.define "cassandra#{cassandra_id}" do |cassandra|
       ip_address = "192.168.100.#{100 + cassandra_id}"
-      group ||= []
       group << "cassandra#{cassandra_id}"
-      seeds ||= ""
-      seeds << "#{ip_address},"
+      seeds << "#{ip_address}"
       cassandra.vm.hostname = "cassandra#{cassandra_id}"
       cassandra.vm.box = VAGRANT_IMAGE
       cassandra.vm.network "private_network", ip: "#{ip_address}"
@@ -59,11 +59,11 @@ Vagrant.configure(2) do |config|
       end
 
       if cassandra_id == CLUSTER_SIZE
-        puts "SEEDS: #{seeds}"
+        seeds = seeds.join(",")
         cassandra.vm.provision :ansible do |ansible|
         ansible.limit = "all"
           ansible.extra_vars = {
-            seeds: seeds.chomp(",")
+            seeds: seeds
           }
           ansible.groups = {
             "cassandra" => group

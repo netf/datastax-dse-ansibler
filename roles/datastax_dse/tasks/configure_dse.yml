@@ -12,6 +12,9 @@
 - name: iptables | add client (9042, 9160) ports
   command: /sbin/iptables -I INPUT 3 -p tcp --match multiport --dports 9042,9160 -j ACCEPT -m comment --comment "client ports"
 
+
+- file: path=/etc/dse/conf state=directory mode=0755 owner=cassandra group=cassandra
+
 # Create keystore
 - name: dse | create a keystore
   shell: >
@@ -19,10 +22,34 @@
     -genkey -keyalg RSA
     -storepass datastax
     -alias {{ansible_hostname}}
-    -keystore /etc/dse/.keystore
+    -keystore /etc/dse/conf/.keystore
     -dname "cn=Datastax, ou=Datastax, o=Datastax, c=US"
+  args:
+    creates: /etc/dse/conf/.keystore
 
-#- file: path=/etc/dse/.keystore owner=cassandra group=cassandra mode=0644
+- file: path=/etc/dse/conf/.keystore mode=0600 owner=cassandra group=cassandra
+
+# Export public certificate to use by other nodes
+- name: dse | export public cert to use by other nodes
+  shell: >
+    keytool
+    -export
+    -storepass datastax
+    -alias {{ansible_hostname}}
+    -keystore /etc/dse/conf/.keystore
+    -file /etc/dse/conf/{{ansible_hostname}}.crt
+  args:
+    creates: /etc/dse/conf/{{ansible_hostname}}.crt
+
+- file: path=/etc/dse/conf/{{ansible_hostname}}.crt mode=0644 owner=cassandra group=cassandra
+
+# Certificate synchronization
+#- name: dse | synchronize public cert with other nodes in a cluster
+#  synchronize:
+#      mode: pull
+#      src: /etc/dse/conf/{{ansible_hostname}}.crt
+#      dest: /etc/dse/conf/{{ansible_hostname}}.crt
+#  delegate_to: cassandra1
 
 # Copy Cassandra configuration
 - name: dse | copy cassandra.yml conf file
