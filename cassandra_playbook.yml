@@ -5,9 +5,5 @@
     - os_settings
     - ntp
     - datastax_dse
-  sudo: true
-
-- hosts: openldap
-  roles:
-    - openldap_server
+    - openldap_cassandra
   sudo: true

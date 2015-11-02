@@ -1,0 +1,6 @@
+--- 
+- hosts: openldap*
+  roles:
+    - openldap_server
+    - openldap_client
+  sudo: true

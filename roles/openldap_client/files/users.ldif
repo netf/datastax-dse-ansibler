@@ -1,0 +1,48 @@
+# Root Organization
+#dn: dc=example,dc=com
+#dc: example
+#objectClass: dcObject
+#objectClass: organization
+#o: Example Inc
+
+# super user node, password Password1
+#dn: cn=theboss,dc=example,dc=com
+#objectclass: organizationalRole
+#objectclass: simpleSecurityObject
+#cn: theboss
+#description: LDAP administrator
+#userPassword: {CRYPT}GG.vffIB4NxgY
+
+# some normal user node, password Password1
+#dn: uid=someuser, dc=example, dc=com
+#objectClass: account
+#objectClass: simpleSecurityObject
+#uid: someuser
+#description: Just a regular user
+#userPassword: {CRYPT}GG.vffIB4NxgY
+
+dn: cn=firstuser,o=example.com
+ou: users
+objectClass: inetOrgPerson
+cn: firstuser_name
+sn: firstuser_surname
+# The following is the username you configure in Cassandra 
+uid: firstuser
+userPassword: password
+
+dn: cn=thesuperuser,o=example.com
+ou: users
+objectClass: inetOrgPerson
+cn: thesuperuser_name
+sn: thesuperuser_surname
+# The following is the username you configure in Cassandra 
+uid: thesuperuser
+userPassword: password
+
+dn: cn=cassandra,o=example.com
+ou: users
+objectClass: inetOrgPerson
+cn: cassandra
+sn: cassandra
+uid: cassandra
+userPassword: cassandra

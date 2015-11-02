@@ -1,0 +1,12 @@
+---
+# tasks file for openldap-client
+
+- name: copy ldif file to openldap server
+  copy: src={{openldap_client_ldif}} dest=/home/vagrant
+  
+# not working atm, TODO maybe make this work with LDIF changeType:delete file?
+#- name: delete any users that may already exist
+#  shell: ldapdelete -x -w {{openldap_server_rootpw}} -D "{{openldap_bind_dn}}"
+  
+- name: create users from ldif file
+  shell: ldapadd -x -w {{openldap_server_rootpw}} -D "{{openldap_bind_dn}}" -f {{openldap_client_ldif}} && touch /etc/ldap/users_created creates=/etc/ldap/users_created 

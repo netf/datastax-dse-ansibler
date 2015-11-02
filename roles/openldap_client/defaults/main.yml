@@ -1,0 +1,13 @@
+---
+# defaults file for openldap-client
+openldap_bind_dn: "cn=Manager,o=example.com"
+openldap_client_ldif: "users.ldif"
+
+# TODO: these should move to some file shared across roles, so that openldap client and openldap server can both use the same variables
+openldap_server_domain_name: example.com
+openldap_server_rootpw: passme
+openldap_server_enable_ssl: true
+openldap_server_state: Oregon
+openldap_server_country: US
+openldap_server_location: Portland
+openldap_server_organization: IT

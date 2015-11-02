@@ -1,0 +1,31 @@
+---
+# tasks file for openldap-cassandra
+
+- name: configure ldap otions in dse
+  template: src=dse.yaml.j2 dest=/etc/dse/dse.yaml owner=cassandra
+  
+- name: copy CQL script to create Cassandra users
+  copy: src=create_users.cql dest=/home/vagrant
+
+- name: create CQL users matching the existing LDAP users
+  shell: "cqlsh {{ansible_eth1['ipv4'].address}} -u cassandra -p cassandra -f create_users.cql"
+  when: ansible_hostname == "cassandra3"
+
+- name: change cassandra authentication to be LDAP
+  replace: "dest=/etc/dse/cassandra/cassandra.yaml regexp='^(authenticator:) .*' replace='authenticator: com.datastax.bdp.cassandra.auth.LdapAuthenticator'"
+
+- name: restart DSE after switching to LDAP auth
+  service: name=dse state=restarted
+
+#- name: pause to let dse start up completely
+#  pause: seconds=30
+
+## not even strictly necessary
+#- name: delete default cassandra superuser
+#  shell: "cqlsh {{ansible_eth1['ipv4'].address}} -u theboss -p cassandra -f create_users.cql"
+#  when: ansible_hostname == "cassandra3"
+  
+  
+  
+  
+ 

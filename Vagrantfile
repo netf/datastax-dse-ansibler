@@ -55,7 +55,7 @@ Vagrant.configure(2) do |config|
       v.customize ["modifyvm", :id, "--ioapic", "on"]
     end
     openldap.vm.provision :ansible do |ansible|
-      ansible.playbook = "playbook.yml"
+      ansible.playbook = "openldap_playbook.yml"
     end
   end
 
@@ -101,7 +101,7 @@ Vagrant.configure(2) do |config|
           ansible.groups = {
             "cassandra" => group
           }
-          ansible.playbook = "playbook.yml"
+          ansible.playbook = "cassandra_playbook.yml"
         end
       end
     end

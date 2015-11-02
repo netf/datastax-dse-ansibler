@@ -60,3 +60,5 @@
 - name: dse | start service
   service: name=dse state=started enabled=yes
 
+- name: pause to let dse start up completely
+  pause: seconds=30

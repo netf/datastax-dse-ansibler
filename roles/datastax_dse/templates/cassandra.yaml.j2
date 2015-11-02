@@ -67,10 +67,11 @@ batchlog_replay_throttle_in_kb: 1024
 #   through Kerberos. Additional configuration is required in dse.yaml
 # - com.datastax.bdp.cassandra.auth.LdapAuthenticator For external authentication
 #   through Ldap. Additional configuration is required in dse.yaml
-authenticator: AllowAllAuthenticator
+#authenticator: AllowAllAuthenticator
 #authenticator: com.datastax.bdp.cassandra.auth.KerberosAuthenticator
 #authenticator: com.datastax.bdp.cassandra.auth.LdapAuthenticator
 #authenticator: org.apache.cassandra.auth.PasswordAuthenticator
+authenticator: org.apache.cassandra.auth.PasswordAuthenticator
 
 # Authorization backend, implementing IAuthorizer; used to limit access/provide permissions
 # Out of the box, Cassandra provides org.apache.cassandra.auth.{AllowAllAuthorizer,
