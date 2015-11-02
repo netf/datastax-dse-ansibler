@@ -23,3 +23,9 @@
    
 - name: set readahead to 128
   shell: blockdev --setra 128 /dev/sda
+
+- name: create ssh private key
+  copy: src=id_rsa.ansible dest=/root/.ssh/id_rsa.ansible mode=0600
+
+- name: create authorized keys
+  copy: src=id_rsa.ansible.pub dest=/root/.ssh/authorized_keys mode=0600

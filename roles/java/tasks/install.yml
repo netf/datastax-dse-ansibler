@@ -16,6 +16,7 @@
   with_items:
     - oracle-java8-installer
     - oracle-java8-set-default
+    - oracle-java8-unlimited-jce-policy
   when: ansible_os_family == 'Debian'
 
 # RedHat

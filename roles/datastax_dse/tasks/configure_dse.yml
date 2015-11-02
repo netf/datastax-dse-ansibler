@@ -43,6 +43,22 @@
 
 - file: path=/etc/dse/conf/{{ansible_hostname}}.crt mode=0644 owner=cassandra group=cassandra
 
+# Sync certs to other hosts
+- name: dse | sync certs to other nodes
+  shell: rsync -av -e "ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa.ansible" /etc/dse/conf/*crt root@{{item}}:/etc/dse/conf/
+  with_items:
+    - 192.168.100.101
+    - 192.168.100.102
+    - 192.168.100.103
+
+# copy cert import to /tmp
+- name: dse | copy cert import to /tmp
+  copy: src=cert_import.sh dest=/tmp/cert_import.sh mode=0755
+
+# Import certifactes to truststore
+- name: dse | import certs to a truststore
+  shell: sh /tmp/cert_import.sh
+
 # Certificate synchronization
 #- name: dse | synchronize public cert with other nodes in a cluster
 #  synchronize:
@@ -55,6 +71,11 @@
 - name: dse | copy cassandra.yml conf file
   template: src=cassandra.yaml.j2 dest=/etc/dse/cassandra/cassandra.yaml owner=cassandra
   notify: restart dse
+
+# Copy cqlshrc
+- name: dse | copy cqlshrc conf file
+  template: src=cqlshrc.j2 dest=/root/.cassandra/cqlshrc owner=root
+
 
 # Start Cassandra service
 - name: dse | start service
