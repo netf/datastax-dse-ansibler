@@ -2,7 +2,7 @@
 
 # Debian
 - name: Install Datastax Repository
-  apt_repository: repo="deb https://piotr.wreczycki%40datastax.com:Datastax.8@debian.datastax.com/enterprise stable main" state=present
+  apt_repository: repo="deb https://user%40email.com:Password@debian.datastax.com/enterprise stable main" state=present
   when: ansible_os_family == 'Debian'
 
 - name: Add Datastax key
